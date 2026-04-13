@@ -12,6 +12,28 @@
     body {
         background-color: #FFF9F0;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .col-md-4 {
+        width: 100%;
+        max-width: 450px;
+        padding: 0;
     }
 
     .navbar-header {
@@ -44,6 +66,11 @@
         width: 100%;
         max-width: 450px;
         padding: 20px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 80px);
     }
 
     .login-card {

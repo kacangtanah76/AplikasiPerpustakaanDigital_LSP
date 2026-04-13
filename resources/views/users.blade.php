@@ -10,7 +10,7 @@
     }
 
     body {
-        background-color: #FFF9F0;
+        background-color: #F9F6EE;
         min-height: 100vh;
     }
 
@@ -45,7 +45,17 @@
     }
 
     .navbar-logo {
-        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .navbar-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .navbar-menu {
@@ -298,8 +308,25 @@
     <div class="navbar-content">
         <!-- Branding -->
         <a href="{{ route('dashboard') }}" class="navbar-brand">
-            <span class="navbar-logo">📚</span>
-            <span>SmartLib</span>
+            <div class="navbar-logo">
+                <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="25" cy="25" r="24" fill="white" stroke="#334EAC" stroke-width="1.5"/>
+                    
+                    <!-- Inner red circle -->
+                    <circle cx="25" cy="16" r="10" fill="#DC3545"/>
+                    
+                    <!-- Book shape (hourglass/document) -->
+                    <path d="M 22 12 L 22 20 Q 25 22 28 20 L 28 12 Z" fill="white" stroke="white" stroke-width="0.5"/>
+                    
+                    <!-- Bottom section -->
+                    <path d="M 18 26 L 32 26 L 30 32 Q 25 34 20 32 Z" fill="#334EAC"/>
+                    
+                    <!-- Decorative elements -->
+                    <circle cx="25" cy="25" r="23" fill="none" stroke="#334EAC" stroke-width="0.7" stroke-dasharray="2,2"/>
+                </svg>
+            </div>
+            <span>SMKAKNB</span>
         </a>
 
         <!-- Navigation Menu -->
@@ -336,8 +363,8 @@
             <!-- Logout Button -->
             <form method="POST" action="{{ route('logout') }}" class="m-0 d-inline">
                 @csrf
-                <button type="submit" class="btn-navbar-logout">
-                    <i class="bi bi-box-arrow-right"></i>
+                <button type="submit" class="btn-navbar-logout" title="Logout">
+                    <i class="bi bi-box-arrow-right"></i> Logout
                 </button>
             </form>
         </div>

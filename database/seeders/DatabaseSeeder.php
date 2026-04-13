@@ -20,14 +20,17 @@ class DatabaseSeeder extends Seeder
         if (!User::where('name', 'Admin')->exists()) {
             User::factory()->create([
                 'name' => 'Admin',
-                'email' => 'admin@example.com',
+                'email' => 'admin@gmail.com',
                 'role' => 'admin',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('12345'),
                 'kelas' => 'XII',
                 'jurusan' => 'PPLG',
             ]);
         }
 
         // User harus register terlebih dahulu untuk akses aplikasi
+        
+        // Initialize book stocks
+        $this->call(BookStockSeeder::class);
     }
 }

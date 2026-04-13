@@ -10,7 +10,7 @@
     }
 
     body {
-        background-color: #FFF9F0;
+        background-color: #F9F6EE;
         min-height: 100vh;
     }
 
@@ -45,7 +45,17 @@
     }
 
     .navbar-logo {
-        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .navbar-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .navbar-menu {
@@ -151,13 +161,18 @@
     }
 
     .hero-section {
-        background: linear-gradient(135deg, #334EAC 0%, #7096D1 100%);
+        background: linear-gradient(135deg, rgba(51, 78, 172, 0.85) 0%, rgba(112, 150, 209, 0.85) 100%), url('{{ asset('asset/gambarSekolah.jpeg') }}') center/cover no-repeat;
         color: white;
         padding: 80px 40px;
         border-radius: 0;
         margin-bottom: 50px;
         text-align: center;
         box-shadow: 0 10px 40px rgba(51, 78, 172, 0.2);
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .hero-section h1 {
@@ -334,15 +349,17 @@
     <div class="navbar-content">
         <!-- Branding -->
         <a href="{{ route('dashboard') }}" class="navbar-brand">
-            <span class="navbar-logo"></span>
-            <span>SMKAKB</span>
+            <div class="navbar-logo">
+                <img src="{{ asset('asset/logosmkkpng.png') }}" alt="Logo AK Nusa Bangsa">
+            </div>
+            <span>SMKAKNB</span>
         </a>
 
         <!-- Navigation Menu -->
         <ul class="navbar-menu">
             <li class="navbar-item">
                 <a href="{{ route('dashboard') }}" class="@if(request()->routeIs('dashboard')) active @endif">
-                    <i class="bi bi-house-fill"></i> Dashboard
+                    <i class="bi bi-house-fill"></i> Beranda
                 </a>
             </li>
             <li class="navbar-item">
@@ -375,8 +392,8 @@
             <!-- Logout Button -->
             <form method="POST" action="{{ route('logout') }}" class="m-0 d-inline">
                 @csrf
-                <button type="submit" class="btn-navbar-logout">
-                    <i class="bi bi-box-arrow-right"></i>
+                <button type="submit" class="btn-navbar-logout" title="Logout">
+                    <i class="bi bi-box-arrow-right"></i> Logout
                 </button>
             </form>
         </div>
@@ -386,14 +403,80 @@
 <!-- Hero Section -->
 <div class="hero-section">
     <h1>Selamat Datang! 👋</h1>
-    <p><strong>{{ auth()->user()->name }}</strong></p>
-    <p style="font-size: 1.1rem; opacity: 0.9;">Kelola akun Anda dan jelajahi perpustakaan digital</p>
+        <p><strong>{{ auth()->user()->name }}</strong></p>
+        <p style="font-size: 1.1rem; opacity: 0.9;">
+        @if(auth()->user()->role === 'admin')
+            Kelola sistem perpustakaan digital dengan mudah
+        @else
+            Jelajahi koleksi buku dan kelola peminjaman Anda
+        @endif
+        </p>
 </div>
 
 <!-- Main Content -->
 <div class="container-modern py-5">
+    <!-- User Dashboard Section -->
+    @if(auth()->user()->role !== 'admin')
+        <!-- User Statistics -->
+        <div class="cards-grid" style="margin-bottom: 40px;">
+            <div class="modern-card" style="border-top: 4px solid #FFD700;">
+                <h2 style="color: #FFD700;">
+                    <i class="bi bi-hourglass-split"></i> Sedang Dipinjam
+                </h2>
+                <div style="font-size: 3rem; font-weight: 700; color: #FFD700; margin: 20px 0;">
+                    {{ $activeLoanCount ?? 0 }}
+                </div>
+                <a href="{{ route('perpustakaan.riwayat') }}" class="btn btn-primary-modern" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                    Lihat Detail
+                </a>
+            </div>
+
+            <div class="modern-card" style="border-top: 4px solid #4CAF50;">
+                <h2 style="color: #4CAF50;">
+                    <i class="bi bi-check-circle"></i> Dikembalikan
+                </h2>
+                <div style="font-size: 3rem; font-weight: 700; color: #4CAF50; margin: 20px 0;">
+                    {{ $returnedLoanCount ?? 0 }}
+                </div>
+                <a href="{{ route('perpustakaan.riwayat') }}" class="btn btn-primary-modern" style="background: linear-gradient(135deg, #4CAF50, #45a049);">
+                    Lihat Riwayat
+                </a>
+            </div>
+
+            <div class="modern-card" style="border-top: 4px solid #F44336;">
+                <h2 style="color: #F44336;">
+                    <i class="bi bi-exclamation-circle"></i> Hilang
+                </h2>
+                <div style="font-size: 3rem; font-weight: 700; color: #F44336; margin: 20px 0;">
+                    {{ $lostLoanCount ?? 0 }}
+                </div>
+                <a href="{{ route('perpustakaan.riwayat') }}" class="btn btn-primary-modern" style="background: linear-gradient(135deg, #F44336, #da190b);">
+                    Lihat Laporan
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="modern-card" style="margin-bottom: 40px;">
+            <h2>
+                <i class="bi bi-lightning-fill"></i> Akses Cepat
+            </h2>
+            <div class="action-buttons" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <a href="{{ route('perpustakaan.pinjam') }}" class="btn btn-primary-modern" style="flex: 1; min-width: 200px; text-align: center;">
+                    <i class="bi bi-plus-circle"></i> Pinjam Buku Baru
+                </a>
+                <a href="{{ route('perpustakaan.riwayat') }}" class="btn btn-primary-modern" style="flex: 1; min-width: 200px; text-align: center; background: linear-gradient(135deg, #7096D1 0%, #334EAC 100%);">
+                    <i class="bi bi-clock-history"></i> Lihat Riwayat
+                </a>
+                <a href="{{ route('perpustakaan.pinjam') }}" class="btn btn-primary-modern" style="flex: 1; min-width: 200px; text-align: center; background: linear-gradient(135deg, #9C27B0, #7B1FA2);">
+                    <i class="bi bi-bookmark"></i> koleksi Buku
+                </a>
+            </div>
+        </div>
+    @endif
+
+    <!-- Profile Card -->
     <div class="cards-grid">
-        <!-- Profile Card -->
         <div class="modern-card">
             <h2>
                 <i class="bi bi-person-circle"></i> Profil Anda
@@ -449,7 +532,7 @@
         <div class="modern-card">
             <h2>
                 @if (auth()->user()->role === 'admin')
-                    <i class="bi bi-shield-check"></i> Hak Akses Admin
+                    <i class="bi bi-shield-check"></i> Dashboard Admin
                 @else
                     <i class="bi bi-info-circle"></i> Informasi Akses
                 @endif
@@ -464,31 +547,36 @@
                 </a>
             @else
                 <p style="color: #555; line-height: 1.6; margin-bottom: 25px;">
-                    Sebagai pengguna/siswa, Anda dapat mengakses konten perpustakaan digital dan fitur-fitur standar aplikasi. Jelajahi koleksi buku dan materi pembelajaran kami.
+                    Sebagai pengguna/siswa, Anda dapat mengakses konten perpustakaan digital dan mengelola peminjaman buku dengan mudah.
                 </p>
-                <a href="{{ route('users.index') }}" class="btn btn-primary-modern">
-                    <i class="bi bi-book"></i> Jelajahi Perpustakaan
-                </a>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="{{ route('perpustakaan.pinjam') }}" class="btn btn-primary-modern">
+                        <i class="bi bi-book"></i> Mulai Meminjam
+                    </a>
+                </div>
             @endif
         </div>
     </div>
 
-    <!-- Action Buttons -->
-    <div style="text-align: center; margin-bottom: 40px;">
-        @if (auth()->user()->role !== 'admin')
-        <!-- <a href="{{ route('users.index') }}" class="btn btn-primary-modern" style="margin-right: 15px;">
-            <i class="bi bi-people-fill"></i> Lihat Daftar Pengguna Lain
-        </a> -->
-        @endif
+    <!-- Warning for Users -->
+    @if(auth()->user()->role !== 'admin')
+    <div class="alert-info-modern" style="margin-top: 40px; border-left-color: #4CAF50; background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));">
+        <h5 style="color: #2E7D32;">
+            <i class="bi bi-info-circle"></i> Panduan Penggunaan
+        </h5>
+        <p>
+            📚 Anda dapat meminjam buku dari koleksi kami yang lengkap. Pastikan untuk mengembalikan buku sesuai dengan tanggal yang sudah ditentukan untuk menghindari denda keterlambatan sebesar Rp 5.000 per hari.
+        </p>
     </div>
+    @endif
 
     <!-- Info Alert -->
     <div class="alert-info-modern">
         <h5>
-            <i class="bi bi-lightbulb"></i> Informasi Penting
+            <i class="bi bi-lightbulb"></i> Keamanan Akun
         </h5>
         <p>
-            📚 Data profil Anda telah tersimpan dengan aman di sistem perpustakaan digital. Untuk menjaga keamanan akun, 
+            🔒 Data profil Anda telah tersimpan dengan aman di sistem perpustakaan digital. Untuk menjaga keamanan akun, 
             jangan bagikan email dan password Anda kepada siapa pun. Gunakan tombol Logout untuk keluar dari aplikasi.
         </p>
     </div>

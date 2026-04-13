@@ -1,11 +1,11 @@
-@extends('layout.layout')
+@extends('layout.admin-layout')
 
 @section('title', 'Daftar Pengguna')
 
 @section('content')
 <style>
     body {
-        background-color: #FFF9F0;
+        background-color: #F9F6EE;
     }
 
     .navbar-admin {
